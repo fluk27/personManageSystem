@@ -1,0 +1,5 @@
+# github.com/fluk27/StockMagageSysyem/routes
+routes\user_routes.go:12:31: not enough arguments in call to uc.Login
+	have ()
+	want (*fiber.Ctx)
+routes\user_routes.go:12:31: cannot use uc.Login() (type error) as type func(*fiber.Ctx) error in argument to routes.Get
