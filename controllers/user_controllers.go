@@ -17,6 +17,7 @@ type Student struct {
 //Login is functon login(user,pasword)
 func (uc *UserContrillers) Login(c *fiber.Ctx) error {
 	es:=&services.ELKServices{}
-	es.GetData()
+	//es.InstertData()
+	es.GetData("students")
 	return c.SendString("hello login")
 }
