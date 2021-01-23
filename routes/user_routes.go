@@ -9,5 +9,5 @@ import (
 func UseRoutes(routes *fiber.App) {
 	
 uc:=controllers.UserContrillers{}
-	routes.Get("/hello", uc.Login)
+	routes.Post("/Login", uc.Login)
 }
