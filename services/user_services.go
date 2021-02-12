@@ -7,6 +7,7 @@ import (
 	"log"
 
 	"github.com/fluk27/StockMagageSysyem/models"
+	outlib "github.com/fluk27/testgo2020/services"
 	elastic "github.com/olivere/elastic/v7"
 )
 
@@ -14,42 +15,55 @@ import (
 type UserServices struct {
 }
 
-//InstertDataUser is function InstertDataUser
-func (us *UserServices) InstertDataUser(index string,user *models.UserModel) (result string, err error) {
-	ELK := &ELKServices{}
-
-	ctx := context.Background()
-	ELK.UrlELK = "http://localhost:9200"
-	esclient, err := ELK.initELK()
-	if err != nil {
-		log.Println("Error initializing : ", err)
-		return "", err
+//InstertDataUsers is function add data user to ELK
+func (us *UserServices) InstertDataUsers(index string, user *models.UserModel) (result string, err error) {
+	rsa:=outlib.RSAKey{
+		PathPublicKey:"./",
+		FileNamePublicKey: "publicKey.pem",
+		PathPrivateKey: "./",
+		FileNamePrivateKey: "privateKey.pem",
 	}
-
-	//creating student object
-
-	dataJSON, err := json.Marshal(user)
+	result,err=rsa.EncyptDataWithPKC("0844038001")
 	if err != nil {
-		log.Fatalln("err stuct to json:", err)
-		return "", err
+		return " ", err
 	}
-	js := string(dataJSON)
-	_, err = esclient.Index().
-		Index(index).
-		BodyJson(js).
-		Do(ctx)
+	log.Println("rr:",result)
+	ex,err:=rsa.DncyptDataWithPKC(result)
+	log.Println("ex:",ex)
+	// ELK := &ELKServices{}
 
-	if err != nil {
-		log.Fatalln("error insert:", err.Error())
-		return "", err
-	}
+	// ctx := context.Background()
+	// ELK.UrlELK = "http://localhost:9200"
+	// esclient, err := ELK.initELK()
+	// if err != nil {
+	// 	log.Println("Error initializing : ", err)
+	// 	return "", err
+	// }
+
+	// //creating student object
+
+	// dataJSON, err := json.Marshal(user)
+	// if err != nil {
+	// 	log.Fatalln("err stuct to json:", err)
+	// 	return "", err
+	// }
+	// js := string(dataJSON)
+	// _, err = esclient.Index().
+	// 	Index(index).
+	// 	BodyJson(js).
+	// 	Do(ctx)
+
+	// if err != nil {
+	// 	log.Fatalln("error insert:", err.Error())
+	// 	return "", err
+	// }
 
 	return "insert successfull", nil
 
 }
 
-// GetData is function get data from index in ELK
-func (us *UserServices) getdata(indexName string, query map[string]string) (*[]models.UserModel, error) {
+// getdataUsers is function get data from index in ELK
+func (us *UserServices) getdataUsers(indexName string, query map[string]string) (*[]models.UserModel, error) {
 	ELK := &ELKServices{}
 	ctx := context.Background()
 	ELK.UrlELK = "http://localhost:9200"

@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"log"
+	"net/http"
 
 	"github.com/fluk27/StockMagageSysyem/models"
 	"github.com/fluk27/StockMagageSysyem/services"
@@ -22,10 +23,11 @@ func (uc *UserContrillers) Login(c *fiber.Ctx) error {
 		return c.JSON(err.Error())
 	}
 	
-	re,err:=us.InstertDataUser("users",user)
+	re,err:=us.InstertDataUsers("users",user)
 if err != nil {
 	log.Println("error intertData:",err.Error())
-	return c.JSON(err.Error())
+	return c.Status(http.StatusInternalServerError).JSON(err.Error())
 }
-	return c.JSON(re)
+
+	return c.Status(http.StatusOK).JSON(re)
 }
