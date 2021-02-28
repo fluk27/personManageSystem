@@ -13,6 +13,7 @@ type ELKServices struct {
 	UrlELK string
 }
 
+
 //GetESClient is function
 func (ELK *ELKServices) initELK() (*elastic.Client, error) {
 

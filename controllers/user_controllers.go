@@ -19,15 +19,22 @@ func (uc *UserContrillers) Login(c *fiber.Ctx) error {
 	us := &services.UserServices{}
 	err := c.BodyParser(user)
 	if err != nil {
-		log.Println("errorUC:",err.Error())
+		log.Println("errorUC:", err.Error())
 		return c.JSON(err.Error())
 	}
-	
-	re,err:=us.InstertDataUsers("users",user)
-if err != nil {
-	log.Println("error intertData:",err.Error())
-	return c.Status(http.StatusInternalServerError).JSON(err.Error())
-}
+
+	re, err := us.InstertDataUsers("users", user)
+	if err != nil {
+		log.Println("error intertData:", err.Error())
+		return c.Status(http.StatusInternalServerError).JSON(err.Error())
+	}
 
 	return c.Status(http.StatusOK).JSON(re)
+}
+
+//Register is function insert data to system
+func (uc *UserContrillers) Register(c *fiber.Ctx) error {
+	// us:=&services.UserServices{}
+	// us.GetdataUsers("students",)
+	return c.Status(http.StatusOK).JSON("5555")
 }

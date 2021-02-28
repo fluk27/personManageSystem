@@ -4,8 +4,9 @@ go 1.14
 
 require (
 	github.com/andybalholm/brotli v1.0.1 // indirect
-	github.com/fluk27/testgo2020 v0.0.0-20210128044226-f7282dee452b
+	github.com/fluk27/testgo2020 v0.0.0-20210128044226-f7282dee452b // indirect
 	github.com/gofiber/fiber/v2 v2.3.3
+	github.com/graphql-go/graphql v0.7.9 // indirect
 	github.com/klauspost/compress v1.11.7 // indirect
 	github.com/olivere/elastic/v7 v7.0.22
 	github.com/valyala/fasthttp v1.19.0 // indirect
