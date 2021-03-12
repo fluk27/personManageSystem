@@ -2,18 +2,18 @@ package models
 
 //UserModel is set interface all atrribute users
 type UserModel struct {
-	Username string `json:"username"validate:"required"`
-	Password string `json:"password"validate:"required"`
-	FistName string `json:"fristName"validate:"required"`
-	LastName string `json:"lastName"validate:"required"`
+	Username string `json:"username"validate:"nonzero"`
+	Password string `json:"password"validate:"nonzero"`
+	FistName string `json:"fristName"validate:"nonzero"`
+	LastName string `json:"lastName"validate:"nonzero"`
 	Contact  *contact
 }
 
 // Contact is set interface all contact of users
 type contact struct {
-	TelNumber    string `json:"telNo."`
-	EmailAddress string `json:"email"`
-	LineID       string `json:"lineID"`
+	TelNumber    string `json:"telNo."validate:"nonzero"`
+	EmailAddress string `json:"email"validate:"nonzero"`
+	LineID       string `json:"lineID"validate:"nonzero"`
 }
 
 //Address is set interface address users
