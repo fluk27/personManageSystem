@@ -22,8 +22,8 @@ func (uc *UserContrillers) Login(c *fiber.Ctx) error {
 		log.Println("errorUC:", err.Error())
 		return c.JSON(err.Error())
 	}
-	log.Println(user.Username)
-	if user.Username != "flk12345" || user.Password != "Ws0844038001" {
+	log.Println(user.EmailAddress)
+	if user.EmailAddress != "flk12345" || user.Password != "Ws0844038001" {
 		return c.Status(http.StatusUnauthorized).JSON("error:'unauthen'")
 	}
 
@@ -52,14 +52,13 @@ func (uc *UserContrillers) Register(c *fiber.Ctx) error {
 		return c.Status(http.StatusBadRequest).JSON(result)
 	}
 	query := map[string]string{
-		"username": UM.Username,
+		"username": UM.EmailAddress,
 	}
 	resultUser, err := US.GetdataUsers("users", query)
 	if err != nil {
-		//	log.Fatalln("error getdataUser=",err.Error())
-		return c.Status(http.StatusBadRequest).JSON(err.Error())
+
+		return c.Status(http.StatusInternalServerError).JSON(err.Error())
 	}
-	//log.Fatalln("result user ELK:",resultUser)
 	if len(*resultUser) == 0 {
 		// set up RSA key
 		encpt := &outSer.RSAKey{
@@ -67,18 +66,18 @@ func (uc *UserContrillers) Register(c *fiber.Ctx) error {
 			FileNamePublicKey:  "publicKey.pem",
 			PathPrivateKey:     "./",
 			FileNamePrivateKey: "privateKey.pem"}
-			// hash function sha 256
-		 result,err:=US.Hashfunction512(UM.Password)
-		 if err != nil {
+		// hash function sha 512
+		result, err := US.Hashfunction512(UM.Password)
+		if err != nil {
 			return c.Status(http.StatusBadRequest).JSON(err.Error())
-		 }
-		
+		}
+
 		UM.Password, err = encpt.EncyptDataWithPKC(UM.Password, result)
 		if err != nil {
 			return c.Status(http.StatusBadRequest).JSON(err.Error())
 		}
 		US.InstertDataUsers("users", UM)
-		return c.Status(http.StatusCreated).JSON(UM)
+		return c.Status(http.StatusCreated).JSON("created user")
 	} else {
 		return c.Status(http.StatusConflict).JSON("user duplicate ")
 	}

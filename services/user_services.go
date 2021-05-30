@@ -55,7 +55,7 @@ func (us *UserServices) InstertDataUsers(index string, user *models.UserModel) (
 
 // GetdataUsers is function get data from index in ELK
 func (us *UserServices) GetdataUsers(indexName string, query map[string]string) (*[]models.UserModel, error) {
-	var students []models.UserModel
+	var users []models.UserModel
 	ELK := &ELKServices{}
 	ctx := context.Background()
 	ELK.UrlELK = "http://localhost:9200"
@@ -65,24 +65,31 @@ func (us *UserServices) GetdataUsers(indexName string, query map[string]string) 
 		errors.New("Client fail ")
 	}
 
-	_, err = ELK.getIndexElastic(indexName)
+	_, err = ELK.checkELK(indexName)
 	if err != nil {
 		err := ELK.CreateIndex(indexName)
 		if err != nil {
-			
+
 			return nil, errors.New(err.Error())
 		}
-		
-	}
-	// name rsult from query map
-	var Name string
-	for i := range query {
-		Name = i
-	}
 
+	}
 	searchSource := elastic.NewSearchSource()
-	searchSource.Query(elastic.NewMatchQuery(Name, query[Name]))
-
+	if len(query) == 0 {
+		// get all data	
+		searchSource.Query(elastic.NewMatchAllQuery())
+		} else {
+			// name rsult from query map
+			var Name string
+			
+			for i := range query {
+				Name = i
+			}
+		
+		//	elastic.NewAdjacencyMatrixAggregation().Filters()
+			searchSource.Query(elastic.NewMatchQuery(Name, query[Name]))
+			elastic.NewBoolQuery().Filter()
+	}
 	searchService := esclient.Search().Index(indexName).SearchSource(searchSource)
 
 	searchResult, err := searchService.Do(ctx)
@@ -93,20 +100,20 @@ func (us *UserServices) GetdataUsers(indexName string, query map[string]string) 
 	}
 
 	for _, hit := range searchResult.Hits.Hits {
-		var student models.UserModel
-		err := json.Unmarshal(hit.Source, &student)
+		var user models.UserModel
+		err := json.Unmarshal(hit.Source, &user)
 		if err != nil {
 			fmt.Println("[Getting Students][Unmarshal] Err=", err)
 		}
 
-		students = append(students, student)
+		users = append(users, user)
 	}
 
 	if err != nil {
 		fmt.Println("Fetching student fail: ", err)
 	}
 
-	return &students, nil
+	return &users, nil
 
 }
 
@@ -114,10 +121,10 @@ func (us *UserServices) ValidateStruct(user *models.UserModel) (bool, []error) {
 	var errorValidate []error
 	var satutsValldate bool
 	satutsValldate = false
-	err:=validator.WithPrintJSON(true).Validate(user)
+	err := validator.WithPrintJSON(true).Validate(user)
 	if err != nil {
 		satutsValldate = true
-	log.Println("err from validate:", err.Error())
+		log.Println("err from validate:", err.Error())
 		errorValidate = append(errorValidate, err)
 		// values not valid, deal with errors here
 		return satutsValldate, errorValidate
