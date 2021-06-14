@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"github.com/fluk27/StockMagageSysyem/controllers"
+	"github.com/fluk27/personManageSystem/controllers"
 	"github.com/gofiber/fiber/v2"
 )
 

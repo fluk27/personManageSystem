@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"github.com/fluk27/StockMagageSysyem/models"
-	"github.com/fluk27/StockMagageSysyem/services"
+	"github.com/fluk27/personManageSystem/models"
+	"github.com/fluk27/personManageSystem/services"
 	outSer "github.com/fluk27/testgo2020/services"
 	"github.com/gofiber/fiber/v2"
 	"log"

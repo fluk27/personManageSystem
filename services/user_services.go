@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/fluk27/StockMagageSysyem/models"
+	"github.com/fluk27/personManageSystem/models"
 	elastic "github.com/olivere/elastic/v7"
 	"github.com/pkg/errors"
 	validator "gopkg.in/validator.v2"
