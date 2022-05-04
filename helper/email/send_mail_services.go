@@ -22,7 +22,9 @@ type mailConfig struct {
 	Host     string `yaml:"SERVER" validate:"required"`
 }
 
-// vaildateConfig
+var validate *validator.Validate
+
+// vaildateConfig form yaml fie
 func (sm *SendMailServices) vaildateConfig() (*mailConfig, error) {
 	buf, err := ioutil.ReadFile("./helper/email/configs/g_emaiL.env.yaml")
 	if err != nil {
@@ -36,23 +38,32 @@ func (sm *SendMailServices) vaildateConfig() (*mailConfig, error) {
 		log.Println("err map yaml to struct:", err.Error())
 		return nil, errors.New(err.Error())
 	}
-	var validate *validator.Validate
-	errr := validate.Struct(mailConfig)
+	validate = validator.New()
+	errr := validate.Struct(mailCon)
 	if errr != nil {
-		return nil, err
+		log.Println("error struct mailConfig:", err.Error())
+		return nil, errors.New(err.Error())
 	}
 	return mailCon, nil
 }
 func (sm *SendMailServices) validateDataMail() error {
-	log.Println("dataMail:", sm)
+	validate = validator.New()
+	err := validate.Struct(sm)
+	if err != nil {
+		log.Println("error struct mailConfig:", err.Error())
+		return  errors.New(err.Error())
+	}
 	return nil
 }
-
+// SendMail config data with stuct 
 func (sm *SendMailServices) SendMail() error {
 	_, err := sm.vaildateConfig()
 	if err != nil {
 		return errors.New(err.Error())
 	}
 	err = sm.validateDataMail()
+	if err != nil {
+		return errors.New(err.Error())
+	}
 	return nil
 }
